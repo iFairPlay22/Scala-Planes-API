@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS vehicles(
+CREATE TABLE IF NOT EXISTS planes(
     date_bucket         date,
     id                  int,
     name                text,

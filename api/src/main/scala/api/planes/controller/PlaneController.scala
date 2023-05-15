@@ -1,23 +1,23 @@
-package api.vehicles.controller
+package api.planes.controller
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.server.Route
 import akka.stream.alpakka.cassandra.scaladsl.CassandraSession
-import api.vehicles.service.VehicleService
+import api.planes.service.PlaneService
 import commons.system.http._HttpControllerSystem
 import io.circe.generic.auto._
 
-class VehicleController(implicit val system: ActorSystem, implicit val session: CassandraSession)
+class PlaneController(implicit val system: ActorSystem, implicit val session: CassandraSession)
     extends _HttpControllerSystem {
 
-  private val vehicleService = new VehicleService()
+  private val planeService = new PlaneService()
 
   override val routes: Route =
-    path("vehicles") {
+    path("planes") {
       get {
         response { () =>
-          vehicleService
-            .getAllVehicles()
+          planeService
+            .getAllPlanes()
         }
       }
     }

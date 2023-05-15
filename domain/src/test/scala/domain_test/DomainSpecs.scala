@@ -1,12 +1,12 @@
 package domain_test
 
-import domain.data.vehicles.VehicleDomain
+import domain.planes.PlaneDomain
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
 class DomainSpecs extends AnyWordSpec with Matchers {
 
-  "Vehicle domain" should {
+  "Planes domain" should {
 
     Range
       .inclusive(0, 50)
@@ -14,13 +14,13 @@ class DomainSpecs extends AnyWordSpec with Matchers {
 
         s"be invalid $r" in {
           assertThrows[IllegalArgumentException] {
-            VehicleDomain.randomInvalid()
+            PlaneDomain.randomInvalid()
           }
         }
 
         s"be valid $r" in {
           noException shouldBe thrownBy {
-            VehicleDomain.randomValid()
+            PlaneDomain.randomValid()
           }
         }
 

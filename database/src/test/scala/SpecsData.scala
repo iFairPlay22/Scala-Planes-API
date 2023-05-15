@@ -1,10 +1,10 @@
-import domain.data.vehicles.VehicleDomain
+import domain.planes.PlaneDomain
 
 trait SpecsData {
 
-  // Random valid vehicles
-  val vehicle1: VehicleDomain = VehicleDomain.randomValid().copy(id = 1)
-  val vehicle2: VehicleDomain = VehicleDomain.randomValid().copy(id = 2)
-  val vehicle3: VehicleDomain = VehicleDomain.randomValid().copy(id = 3)
+  // Random valid planes
+  val plane1: PlaneDomain = PlaneDomain.randomValid().copy(id = 1)
+  val plane2: PlaneDomain = PlaneDomain.randomValid().copy(id = 2)
+  val plane3: PlaneDomain = PlaneDomain.randomValid().copy(id = 3)
 
 }

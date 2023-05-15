@@ -1,6 +1,6 @@
 import akka.actor.ActorSystem
 import commons.system.database._CassandraTestSystem
-import database.repositories.VehicleRepository
+import database.planes.repositories.PlaneRepository
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.concurrent.ScalaFutures
 
@@ -8,55 +8,55 @@ import java.time.LocalDate
 
 class DatabaseSpecs extends _CassandraTestSystem with Matchers with ScalaFutures with SpecsData {
 
-  private val vehiclesRepository: VehicleRepository = new VehicleRepository()
+  private val planeRepository: PlaneRepository = new PlaneRepository()
   private val today: LocalDate = LocalDate.now
 
-  f"return empty vehicles list" in {
+  f"return empty planes list" in {
 
-    val vehicles = await(vehiclesRepository.selectAllByDate(today))
+    val planes = await(planeRepository.selectAllByDate(today))
 
-    vehicles shouldBe Seq()
-
-  }
-
-  f"return vehicles list of length 1" in {
-
-    await(vehiclesRepository.insertOrEdit(vehicle = vehicle1))
-
-    val vehicles = await(vehiclesRepository.selectAllByDate(today))
-    vehicles shouldBe Seq(vehicle1)
+    planes shouldBe Seq()
 
   }
 
-  f"return vehicles list of length 2" in {
+  f"return planes list of length 1" in {
 
-    await(vehiclesRepository.insertOrEdit(vehicle = vehicle1))
-    await(vehiclesRepository.insertOrEdit(vehicle = vehicle2))
+    await(planeRepository.insertOrEdit(plane = plane1))
 
-    val vehicles = await(vehiclesRepository.selectAllByDate(today))
-    vehicles shouldBe Seq(vehicle1, vehicle2)
-
-  }
-
-  f"return vehicles list of length 3" in {
-
-    await(vehiclesRepository.insertOrEdit(vehicle = vehicle1))
-    await(vehiclesRepository.insertOrEdit(vehicle = vehicle3))
-    await(vehiclesRepository.insertOrEdit(vehicle = vehicle2))
-
-    val vehicles = await(vehiclesRepository.selectAllByDate(today))
-    vehicles shouldBe Seq(vehicle1, vehicle2, vehicle3)
+    val planes = await(planeRepository.selectAllByDate(today))
+    planes shouldBe Seq(plane1)
 
   }
 
-  f"return vehicles list of length (no duplicates)" in {
+  f"return planes list of length 2" in {
 
-    await(vehiclesRepository.insertOrEdit(vehicle = vehicle1))
-    await(vehiclesRepository.insertOrEdit(vehicle = vehicle2))
-    await(vehiclesRepository.insertOrEdit(vehicle = vehicle2))
+    await(planeRepository.insertOrEdit(plane = plane1))
+    await(planeRepository.insertOrEdit(plane = plane2))
 
-    val vehicles = await(vehiclesRepository.selectAllByDate(today))
-    vehicles shouldBe Seq(vehicle1, vehicle2)
+    val planes = await(planeRepository.selectAllByDate(today))
+    planes shouldBe Seq(plane1, plane2)
+
+  }
+
+  f"return planes list of length 3" in {
+
+    await(planeRepository.insertOrEdit(plane = plane1))
+    await(planeRepository.insertOrEdit(plane = plane3))
+    await(planeRepository.insertOrEdit(plane = plane2))
+
+    val planes = await(planeRepository.selectAllByDate(today))
+    planes shouldBe Seq(plane1, plane2, plane3)
+
+  }
+
+  f"return planes list of length (no duplicates)" in {
+
+    await(planeRepository.insertOrEdit(plane = plane1))
+    await(planeRepository.insertOrEdit(plane = plane2))
+    await(planeRepository.insertOrEdit(plane = plane2))
+
+    val planes = await(planeRepository.selectAllByDate(today))
+    planes shouldBe Seq(plane1, plane2)
 
   }
 }

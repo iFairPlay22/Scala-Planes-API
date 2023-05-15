@@ -2,7 +2,7 @@
 lazy val global = (project in file("."))
   .settings(defaultSettings)
   .settings(
-    name := "vehicles-root",
+    name := "planes-root",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
     libraryDependencies ++= commonsLibraryDependencies,
     Test / parallelExecution := false,
@@ -15,11 +15,11 @@ lazy val api = (project in file("api"))
   .settings(defaultSettings)
   .settings(dockerSettings)
   .settings(
-    name := "vehicles-api",
+    name := "planes-api",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
     libraryDependencies ++= commonsLibraryDependencies,
     Compile / run / mainClass := Some("api.Main"),
-    Docker / packageName := "vehicles-api")
+    Docker / packageName := "planes-api")
   .dependsOn(domain, database)
 
 lazy val brokerConsumer = (project in file("broker-consumer"))
@@ -27,11 +27,11 @@ lazy val brokerConsumer = (project in file("broker-consumer"))
   .settings(defaultSettings)
   .settings(dockerSettings)
   .settings(
-    name := "vehicles-broker-consumer",
+    name := "planes-broker-consumer",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
     libraryDependencies ++= commonsLibraryDependencies,
     Compile / run / mainClass := Some("broker_consumer.Main"),
-    Docker / packageName := "vehicles-broker-consumer")
+    Docker / packageName := "planes-broker-consumer")
   .dependsOn(domain, database)
 
 lazy val brokerProducer = (project in file("broker-producer"))
@@ -39,17 +39,17 @@ lazy val brokerProducer = (project in file("broker-producer"))
   .settings(defaultSettings)
   .settings(dockerSettings)
   .settings(
-    name := "vehicles-broker-producer",
+    name := "planes-broker-producer",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
     libraryDependencies ++= commonsLibraryDependencies,
     Compile / run / mainClass := Some("broker_producer.Main"),
-    Docker / packageName := "vehicles-broker-producer")
+    Docker / packageName := "planes-broker-producer")
   .dependsOn(domain)
 
 lazy val database = (project in file("database"))
   .settings(defaultSettings)
   .settings(
-    name := "vehicles-database",
+    name := "planes-database",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
     libraryDependencies ++= commonsLibraryDependencies,
     Compile / run / mainClass := Some("database.Main"))
@@ -58,7 +58,7 @@ lazy val database = (project in file("database"))
 lazy val domain = (project in file("domain"))
   .settings(defaultSettings)
   .settings(
-    name := "vehicles-domain",
+    name := "planes-domain",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
     libraryDependencies ++= commonsLibraryDependencies)
   .dependsOn()

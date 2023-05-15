@@ -1,6 +1,5 @@
-package broker_consumer.vehicles.consumers
+package broker_consumer.planes.consumers
 
-import domain.data.vehicles.VehicleDomain
 import akka.Done
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.DateTime
@@ -11,26 +10,27 @@ import io.circe.syntax._
 import com.typesafe.scalalogging.Logger
 import commons.system.broker._BrokerConsumerSystem
 import commons.system.database._CassandraSystem
-import database.repositories.VehicleRepository
+import database.planes.repositories.PlaneRepository
+import domain.planes.PlaneDomain
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
-class VehicleBrokerConsumer(implicit val system: ActorSystem)
-    extends _BrokerConsumerSystem[DateTime, VehicleDomain]
+class PlaneBrokerConsumer(implicit val system: ActorSystem)
+    extends _BrokerConsumerSystem[DateTime, PlaneDomain]
     with _CassandraSystem {
 
   private val logger: Logger = Logger(getClass)
 
-  private val vehicleRepository = new VehicleRepository()
+  private val planeRepository = new PlaneRepository()
 
   override val topic: String = config.getString("broker_consumer.topic")
 
-  override val callbacks: Set[(DateTime, VehicleDomain) => Future[Done]] = Set((_, vehicle) => {
-    logger.info("Processing a consumed vehicle")
-    vehicleRepository
-      .insertOrEdit(vehicle)
-      .andThen(_ => logger.info("Vehicle inserted in cassandra!"))
+  override val callbacks: Set[(DateTime, PlaneDomain) => Future[Done]] = Set((_, plane) => {
+    logger.info("Processing a consumed plane")
+    planeRepository
+      .insertOrEdit(plane)
+      .andThen(_ => logger.info("Plane inserted in cassandra!"))
   })
 
   override def startBrokerConsumer(): Future[Done] = {

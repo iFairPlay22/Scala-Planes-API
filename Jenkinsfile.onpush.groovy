@@ -5,9 +5,9 @@ pipeline {
         args  '--net="ewenbouquet/jenkins-network"'
     } }
     environment {
-        VEHICLES_API_HOST               = '0.0.0.0'
-        VEHICLES_API_PORT               = '8080'
-        BROKER_VEHICLES_TOPIC           = 'vehicles'
+        PLANES_API_HOST                 = '0.0.0.0'
+        PLANES_API_PORT                 = '8080'
+        BROKER_PLANES_TOPIC             = 'ewenbouquet_planes'
         BROKER_BOOTSTRAP_SERVERS        = 'broker:9092'
         BROKER_SCHEDULER_INITIAL_DELAY  = '5 seconds'
         BROKER_SCHEDULER_REFRESH_DELAY  = '1 minute'
