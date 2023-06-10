@@ -12,7 +12,9 @@ import java.time.{Instant, LocalDate}
 import java.util.Date
 import scala.concurrent.Future
 
-class PlaneRepository(implicit val system: ActorSystem, implicit val session: CassandraSession)
+class PlaneRepository(
+    implicit val system: ActorSystem,
+    implicit val cassandraSession: CassandraSession)
     extends _CassandraRepositorySystem {
 
   import PlaneRepository._

@@ -11,7 +11,7 @@ import database.planes.repositories.PlaneRepository
 import java.time.LocalDate
 import scala.concurrent.Future
 
-class PlaneService(implicit val system: ActorSystem, implicit val session: CassandraSession)
+class PlaneService(implicit val system: ActorSystem, implicit val casandraSession: CassandraSession)
     extends _HttpServiceSystem {
 
   private val planeRepository = new PlaneRepository()

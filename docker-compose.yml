@@ -70,7 +70,7 @@ services:
       "
 
   planes-api:
-    image: planes-api:${VERSION}
+    image: ewenbouquet/planes-api:${VERSION}
     ports:
       - "8080:8080"
     networks:
@@ -91,7 +91,7 @@ services:
       - cassandra-init
 
   broker-producer:
-    image: planes-broker-producer:${VERSION}
+    image: ewenbouquet/planes-broker-producer:${VERSION}
     networks:
       - default
     environment:
@@ -111,7 +111,7 @@ services:
       - broker-init
 
   broker-consumer:
-    image: planes-broker-consumer:${VERSION}
+    image: ewenbouquet/planes-broker-consumer:${VERSION}
     networks:
       - default
     environment:

@@ -7,7 +7,7 @@ import api.planes.service.PlaneService
 import commons.system.http._HttpControllerSystem
 import io.circe.generic.auto._
 
-class PlaneController(implicit val system: ActorSystem, implicit val session: CassandraSession)
+class PlaneController(implicit val system: ActorSystem, implicit val cassandraSession: CassandraSession)
     extends _HttpControllerSystem {
 
   private val planeService = new PlaneService()
