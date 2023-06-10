@@ -13,8 +13,6 @@ import scala.util.Try
 class PlaneBrokerProducer(implicit val system: ActorSystem)
     extends _BrokerProducerSystem[DateTime, PlaneDomain] {
 
-  override val topic: String = config.getString("broker_producer.topic")
-
   def produce(plane: PlaneDomain): Future[RecordMetadata] =
     super.produce(DateTime.now, plane)
 

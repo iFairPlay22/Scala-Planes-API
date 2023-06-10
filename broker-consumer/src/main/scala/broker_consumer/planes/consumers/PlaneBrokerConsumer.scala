@@ -24,8 +24,6 @@ class PlaneBrokerConsumer(implicit val system: ActorSystem)
 
   private val planeRepository = new PlaneRepository()
 
-  override val topic: String = config.getString("broker_consumer.topic")
-
   override val callbacks: Set[(DateTime, PlaneDomain) => Future[Done]] = Set((_, plane) => {
     logger.info("Processing a consumed plane")
     planeRepository
