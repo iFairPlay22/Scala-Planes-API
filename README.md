@@ -36,6 +36,8 @@ Generate the docker images publicly:
 
 ### Launch the app
 
+#### Using Docker 
+
 Generate the docker images locally:
 
     sbt docker:publishLocal
@@ -47,6 +49,24 @@ Set the deployment version (ex: 0.1.0-SNAPSHOT):
 Launch the services:
 
     docker-compose up
+
+#### Using Minikube
+
+Launch minikube
+
+    minikube start
+
+Launch the services
+
+    cd ./minikube
+    kubectl apply -f planes-secret.yaml
+    kubectl apply -f planes-config.yaml
+    kubectl apply -f cassandra.yaml
+    kubectl apply -f planes-api.yaml
+
+NOTES: Use cqlsh -u cassandra -p cassandra to run CQL queries
+
+NOTES: Use minikube service planes-api-service --url to have the url
 
 ## Interacting with the sample
 

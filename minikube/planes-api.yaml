@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: planes-api-deployment
+  labels:
+    app: planes-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: planes-api
+  template:
+    metadata:
+      labels:
+        app: planes-api
+    spec:
+      containers:
+      - name: planes-api
+        image: ewenbouquet/planes-api:0.1.0-SNAPSHOT
+        ports:
+        - containerPort: 8080
+        env:
+        - name: API_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: planes-config
+              key: planes-api-host
+        - name: API_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: planes-config
+              key: planes-api-port
+        - name: DATABASE_CONTACT_POINT
+          valueFrom:
+            configMapKeyRef:
+              name: planes-config
+              key: cassandra-url
+        - name: DATABASE_KEYSPACE
+          valueFrom:
+            configMapKeyRef:
+              name: planes-config
+              key: cassandra-keyspace
+        - name: DATABASE_DATACENTER
+          valueFrom:
+            configMapKeyRef:
+              name: planes-config
+              key: cassandra-datacenter
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: planes-api-service
+spec:
+  type: NodePort
+  selector:
+    app: planes-api
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30000

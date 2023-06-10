@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: planes-config
+data:
+
+  # Planes cassandra
+  cassandra-url: cassandra-service:9042
+  cassandra-keyspace: production
+  cassandra-datacenter: datacenter1
+
+  # Planes api
+  planes-api-host: 0.0.0.0
+  planes-api-port: '8080'
