@@ -1,9 +1,8 @@
 package domain.planes
 
-import commons.data._Domain
-import commons.utils._RandomGen
+import commons.random._RandomGen
 
-case class PlaneDomain(id: Int, name: String) extends _Domain {
+case class PlaneDomain(id: Int, name: String) {
   require(0 <= id, "plane id must be positive or zero")
   require(name.nonEmpty, "plane name must be non empty")
   require(

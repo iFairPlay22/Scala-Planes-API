@@ -3,13 +3,12 @@ package database.planes.repositories
 import akka.Done
 import akka.actor.ActorSystem
 import akka.stream.alpakka.cassandra.scaladsl.CassandraSession
+import cassandra._CassandraRepositorySystem
 import com.datastax.oss.driver.api.core.cql.Row
-import commons.system.database._CassandraRepositorySystem
 import database.planes.keyspace.Keyspace._
 import domain.planes.PlaneDomain
 
-import java.time.{Instant, LocalDate}
-import java.util.Date
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class PlaneRepository(

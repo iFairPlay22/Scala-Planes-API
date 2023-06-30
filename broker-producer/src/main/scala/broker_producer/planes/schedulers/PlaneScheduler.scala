@@ -1,16 +1,13 @@
 package broker_producer.planes.schedulers
 
 import akka.Done
-import akka.actor.{ActorSystem, Cancellable}
+import akka.actor.ActorSystem
 import broker_producer.planes.producers.PlaneBrokerProducer
 import com.typesafe.scalalogging.Logger
-import commons.system.actor._ActorSystem
-import commons.system.scheduler._SchedulerSystem
 import domain.planes.PlaneDomain
+import scheduler._SchedulerSystem
 
-import java.time.Duration
 import scala.concurrent.Future
-import scala.util.{Failure, Success, Try}
 
 class PlaneScheduler(implicit val system: ActorSystem) extends _SchedulerSystem {
 

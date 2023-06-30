@@ -1,12 +1,17 @@
-import akka.actor.ActorSystem
-import commons.system.database._CassandraTestSystem
+import cassandra._CassandraTestSystem
+import commons.actor._ActorSystem
 import database.planes.repositories.PlaneRepository
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.concurrent.ScalaFutures
 
 import java.time.LocalDate
 
-class DatabaseSpecs extends _CassandraTestSystem with Matchers with ScalaFutures with SpecsData {
+class DatabaseSpecs
+    extends _ActorSystem
+    with _CassandraTestSystem
+    with Matchers
+    with ScalaFutures
+    with SpecsData {
 
   private val planeRepository: PlaneRepository = new PlaneRepository()
   private val today: LocalDate = LocalDate.now

@@ -1,19 +1,31 @@
 package api_test
 
-import akka.actor.ActorSystem
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Route
+import akka.http.scaladsl.testkit.ScalatestRouteTest
+import api.Main.cassandraSession
 import api.planes.controller.PlaneController
 import api.planes.dto.GetPlanesDTO
 import api.planes.mapper.PlaneResponseMapper
-import commons.system.database._CassandraTestSystem
+import cassandra._CassandraTestSystem
 import database.planes.repositories.PlaneRepository
 import domain.planes.PlaneDomain
 import org.scalatest.matchers.should.Matchers
 import io.circe.generic.codec.DerivedAsObjectCodec.deriveCodec
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.wordspec.AnyWordSpecLike
 
-class ApiSpecs extends _CassandraTestSystem with Matchers with ScalaFutures with SpecsData {
+import scala.concurrent.ExecutionContextExecutor
+
+class ApiSpecs
+    extends AnyWordSpecLike
+    with ScalatestRouteTest
+    with _CassandraTestSystem
+    with Matchers
+    with ScalaFutures
+    with SpecsData {
+
+  override implicit lazy val executor: ExecutionContextExecutor = system.dispatcher
 
   private val planeRepository: PlaneRepository = new PlaneRepository()
   private val planesRoutes: Route = new PlaneController().routes

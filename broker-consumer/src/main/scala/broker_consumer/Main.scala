@@ -1,7 +1,6 @@
 package broker_consumer
-import akka.actor.ActorSystem
 import broker_consumer.planes.consumers.PlaneBrokerConsumer
-import commons.system.actor._ActorSystem
+import commons.actor._ActorSystem
 
 object Main extends _ActorSystem {
 
