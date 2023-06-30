@@ -27,10 +27,10 @@ class ApiSpecs
   override implicit lazy val executor: ExecutionContextExecutor = system.dispatcher
 
   private val planeRepository: PlaneRepository = new PlaneRepository()
-  private val planesRoutes: Route = new PlaneController().routes
+  private val planesRoutes: Route = Route.seal(new PlaneController().routes)
 
   def testPlanesList(expectedPlanes: PlaneDomain*): Unit =
-    Get(f"/planes") ~> planesRoutes ~> check {
+    Get(f"/api/planes") ~> planesRoutes ~> check {
 
       status.shouldEqual(StatusCodes.OK)
 
