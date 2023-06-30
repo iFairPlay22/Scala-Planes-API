@@ -17,7 +17,7 @@ class PlaneController(
   override val routes: Route =
     path("api" / "planes") {
       get {
-        response { () =>
+        complete {
           planeService
             .getAllPlanes()
         }

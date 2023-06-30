@@ -3,7 +3,6 @@ package api_test
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
-import api.Main.cassandraSession
 import api.planes.controller.PlaneController
 import api.planes.dto.GetPlanesDTO
 import api.planes.mapper.PlaneResponseMapper
@@ -79,6 +78,6 @@ class ApiSpecs
       testPlanesList(plane1, plane2)
 
     }
-  }
 
+  }
 }
