@@ -12,11 +12,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{HOST}}/planes",
+					"raw": "{{HOST}}/api/planes",
 					"host": [
 						"{{HOST}}"
 					],
 					"path": [
+						"api",
 						"planes"
 					]
 				}
