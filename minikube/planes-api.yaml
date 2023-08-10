@@ -39,7 +39,7 @@ spec:
           valueFrom:
             configMapKeyRef:
               name: planes-config
-              key: cassandra-keyspace
+              key: planes-api-cassandra-keyspace
         - name: DATABASE_DATACENTER
           valueFrom:
             configMapKeyRef:

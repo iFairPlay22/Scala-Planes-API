@@ -4,7 +4,7 @@ Simple project with Scala, Akka, Cassandra, Kafka and Circe.
 
 ## Setup the environment
 
-### Requirements
+### Nexus environment
 
     export NEXUS_BASE_URL=https://$NEXUS_HOST_URL
 
@@ -34,9 +34,9 @@ Generate the docker images publicly:
 
     sbt docker:publish
 
-### Launch the app
+## Launch the app
 
-#### Using Docker 
+### Using Docker 
 
 Generate the docker images locally:
 
@@ -48,9 +48,9 @@ Set the deployment version (ex: 0.1.0-SNAPSHOT):
 
 Launch the services:
 
-    docker-compose up
+    docker-compose up --detach
 
-#### Using Minikube
+### Using Minikube
 
 Launch minikube
 
@@ -62,7 +62,14 @@ Launch the services
     kubectl apply -f planes-secret.yaml
     kubectl apply -f planes-config.yaml
     kubectl apply -f cassandra.yaml
+    # Wait to be ready and then insert the data using cqlsh
+    kubectl apply -f zookeeper.yaml
+    # Wait to be ready
+    kubectl apply -f broker.yaml
+    # Wait to be ready and then insert the topic
     kubectl apply -f planes-api.yaml
+    kubectl apply -f planes-broker-producer.yaml
+    kubectl apply -f planes-broker-consumer.yaml
 
 NOTES: Use cqlsh -u cassandra -p cassandra to run CQL queries
 

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: planes-broker-consumer-deployment
+  labels:
+    app: planes-broker-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: planes-broker-consumer
+  template:
+    metadata:
+      labels:
+        app: planes-broker-consumer
+    spec:
+      containers:
+        - name: planes-broker-consumer
+          image: ewenbouquet/planes-broker-consumer:0.1.0-SNAPSHOT
+          ports:
+            - containerPort: 8080
+          env:
+            - name: BROKER_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: planes-config
+                  key: broker-url
+            - name: BROKER_TOPIC
+              valueFrom:
+                configMapKeyRef:
+                  name: planes-config
+                  key: planes-broker-consumer-planes-topic
+            - name: DATABASE_CONTACT_POINT
+              valueFrom:
+                configMapKeyRef:
+                  name: planes-config
+                  key: cassandra-url
+            - name: DATABASE_KEYSPACE
+              valueFrom:
+                configMapKeyRef:
+                  name: planes-config
+                  key: planes-broker-consumer-cassandra-keyspace
+            - name: DATABASE_DATACENTER
+              valueFrom:
+                configMapKeyRef:
+                  name: planes-config
+                  key: cassandra-datacenter
