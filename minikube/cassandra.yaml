@@ -58,6 +58,14 @@ spec:
                   - /bin/sh
                   - -c
                   - nodetool drain
+          startupProbe:
+            exec:
+              command:
+                - cqlsh
+            initialDelaySeconds: 120
+            periodSeconds: 15
+            timeoutSeconds: 30
+            failureThreshold: 10
           env:
             - name: MAX_HEAP_SIZE
               value: 512M

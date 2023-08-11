@@ -55,6 +55,18 @@ spec:
                 configMapKeyRef:
                   name: planes-config
                   key: broker-transaction-state-log-replication-factor
+      initContainers:
+        - name: wait-for-zookeeper
+          image: busybox:1.28
+          env:
+            - name: SERVICE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: planes-config
+                  key: zookeeper-service-name
+            - name: RETRY_DELAY
+              value: '15'
+          command: ['sh', '-c', "until nslookup $SERVICE_NAME.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for $SERVICE_NAME; sleep $RETRY_DELAY; done; echo ; echo Service available: end of task!"]
 ---
 apiVersion: v1
 kind: Service

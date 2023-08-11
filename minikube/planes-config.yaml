@@ -9,14 +9,17 @@ data:
   ################################################################################################
 
   # Cassandra
+  cassandra-service-name: cassandra-service
   cassandra-url: cassandra-service:9042
   cassandra-datacenter: datacenter1
 
   # Zookeeper
+  zookeeper-service-name: zookeeper-service
   zookeeper-url: zookeeper-service:2181
   zookeeper-tick-time: '2000'
 
   # Broker
+  broker-service-name: broker-service
   broker-url: broker-service:9093
   broker-broker-id: '1'
   broker-listener-security-protocol-map: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
@@ -31,15 +34,18 @@ data:
   ################################################################################################
 
   # Planes api
+  planes-api-service-name: planes-api-service
   planes-api-cassandra-keyspace: 'production'
   planes-api-host: 0.0.0.0
   planes-api-port: '8080'
 
   # Planes broker producer
+  planes-broker-producer-service-name: planes-broker-producer-service
   planes-broker-producer-topic: 'ewenbouquet_planes'
   planes-broker-producer-initial-delay: 5 seconds
   planes-broker-producer-refresh-delay: 1 minute
 
   # Planes broker consumer
+  planes-broker-consumer-service-name: planes-broker-consumer-service-service
   planes-broker-consumer-planes-topic: 'ewenbouquet_planes'
   planes-broker-consumer-cassandra-keyspace: 'production'

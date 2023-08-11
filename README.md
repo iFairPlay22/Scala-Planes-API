@@ -62,11 +62,8 @@ Launch the services
     kubectl apply -f planes-secret.yaml
     kubectl apply -f planes-config.yaml
     kubectl apply -f cassandra.yaml
-    # Wait to be ready and then insert the data using cqlsh
     kubectl apply -f zookeeper.yaml
-    # Wait to be ready
     kubectl apply -f broker.yaml
-    # Wait to be ready and then insert the topic
     kubectl apply -f planes-api.yaml
     kubectl apply -f planes-broker-producer.yaml
     kubectl apply -f planes-broker-consumer.yaml
