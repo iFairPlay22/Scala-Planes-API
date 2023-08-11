@@ -83,6 +83,8 @@ You can test the endpoints by using the postman collection `api.postman_collecti
 
 ### Endpoints
 
+If launched with minikube, you have to run `minikube service planes-api-service --url` to get the url of the service that you should trigger. Otherwise, it is `localhost`.
+
 Get all available vehicles:
 
     curl --location --request GET 'http://127.0.0.1:8080/api/planes'
