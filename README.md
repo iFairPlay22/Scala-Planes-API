@@ -1,6 +1,6 @@
 # Planes
 
-Simple project with Scala, Akka, Cassandra, Kafka and Circe.
+Simple project with Scala, Akka, Postgres, Kafka and Circe.
 
 ## Setup the environment
 
@@ -61,16 +61,14 @@ Launch the services
     cd ./minikube
     kubectl apply -f planes-secret.yaml
     kubectl apply -f planes-config.yaml
-    kubectl apply -f cassandra.yaml
+    kubectl apply -f db.yaml
     kubectl apply -f zookeeper.yaml
     kubectl apply -f broker.yaml
     kubectl apply -f planes-api.yaml
     kubectl apply -f planes-broker-producer.yaml
     kubectl apply -f planes-broker-consumer.yaml
 
-NOTES: Use cqlsh -u cassandra -p cassandra to run CQL queries
-
-NOTES: Use minikube service planes-api-service --url to have the url
+NOTE: Use minikube service planes-api-service --url to have the url
 
 ## Interacting with the sample
 

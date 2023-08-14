@@ -4,14 +4,15 @@ import akka.Done
 import akka.actor.ActorSystem
 import broker_producer.planes.producers.PlaneBrokerProducer
 import com.typesafe.scalalogging.Logger
-import domain.planes.PlaneDomain
+import domain.planes.{PlaneDomain, PlaneDomainRnd}
+import org.slf4j.LoggerFactory
 import scheduler._SchedulerSystem
 
 import scala.concurrent.Future
 
 class PlaneScheduler(implicit val system: ActorSystem) extends _SchedulerSystem {
 
-  private val logger: Logger = Logger(getClass)
+  private val logger = LoggerFactory.getLogger(getClass)
 
   private final val brokerProducer: PlaneBrokerProducer = new PlaneBrokerProducer()
   override def startScheduler(): Future[Done] =
@@ -27,7 +28,7 @@ class PlaneScheduler(implicit val system: ActorSystem) extends _SchedulerSystem 
   override val action: Unit => Future[Done] = _ => {
     logger.info("Producing plane in topic")
     brokerProducer
-      .produce(PlaneDomain.randomValid())
+      .produce(PlaneDomainRnd.randomValid())
       .andThen(_ => logger.info("Successfully produced plane in topic!"))
       .map(_ => Done.done())
   }

@@ -1,4 +1,4 @@
-package api_test
+package test_db.planes
 
 import domain.planes.{PlaneDomain, PlaneDomainRnd}
 

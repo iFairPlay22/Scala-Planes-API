@@ -2,41 +2,41 @@ version: '3.8'
 
 services:
 
-  cassandra:
-    image: cassandra:latest
+  postgres:
+    image: postgres:latest
     ports:
-      - "9042:9042"
+      - "5432:5432"
     environment:
-      - CASSANDRA_CLUSTER_NAME=datacenter1
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=db_ewen
     healthcheck:
-      test: [ "CMD-SHELL", "[ $$(nodetool statusgossip) = running ]" ]
-      interval: 30s
-      timeout: 10s
+      test: [ "CMD-SHELL", "pg_isready", "-d", "db_prod" ]
+      start_period: 15s
+      interval: 20s
+      timeout: 60s
       retries: 5
-      start_period: 1.5m
 
-  cassandra-init:
-    image: cassandra:latest
+  adminer:
+    image: adminer:latest
+    restart: always
+    ports:
+      - "8090:8080"
+    environment:
+      - ADMINER_DEFAULT_SYSTEM=postgres
+      - ADMINER_DEFAULT_SERVER=postgres
+      - ADMINER_DEFAULT_USER=admin
+      - ADMINER_DEFAULT_PASSWORD=root
+      - ADMINER_DEFAULT_DATABASE=db_ewen
+
+  flyway:
+    image: flyway/flyway:latest
     depends_on:
-      cassandra:
+      postgres:
         condition: service_healthy
     volumes:
-      - ./cassandra/src/main/resources/cassandra-init.cql:/cassandra-init.cql
-    entrypoint:
-      - bash
-      - -c
-      - |
-        while ! bash -c "echo > /dev/tcp/cassandra/9042" 2> /dev/null; do sleep 1; done
-        
-        echo "CREATE KEYSPACE production WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 1};" >> data-init.cql
-        echo "" >> data-init.cql
-        echo "USE production;" >> data-init.cql
-        echo "" >> data-init.cql
-        cat cassandra-init.cql >> data-init.cql
-        echo "" >> data-init.cql
-        cat data-init.cql
-        
-        cqlsh cassandra < data-init.cql
+      - ./migrations/:/flyway/sql/
+    command: -url=jdbc:postgresql://postgres:5432/db_ewen?allowPublicKeyRetrieval=true -schemas=db_ewen -user=admin -password=root -connectRetries=60 -validateMigrationNaming=true migrate
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -64,9 +64,9 @@ services:
     healthcheck:
       test: nc -z localhost 9092 || exit -1
       start_period: 15s
-      interval: 5s
-      timeout: 10s
-      retries: 10
+      interval: 20s
+      timeout: 60s
+      retries: 5
 
   broker-init:
     image: confluentinc/cp-kafka:latest
@@ -97,18 +97,22 @@ services:
     environment:
       - API_HOST=0.0.0.0
       - API_PORT=8080
-      - DATABASE_CONTACT_POINT=cassandra:9042
-      - DATABASE_KEYSPACE=production
-      - DATABASE_DATACENTER=datacenter1
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_KEYSPACE=db_ewen
+      - DB_USER=admin
+      - DB_PASSWORD=root
     entrypoint:
       - bash
       - -c
       - |
-        while ! bash -c "echo > /dev/tcp/cassandra/9042" 2> /dev/null; do sleep 1; done
+        while ! bash -c "echo > /dev/tcp/postgres/5432" 2> /dev/null; do sleep 1; done
         /opt/docker/bin/planes-api
     depends_on:
-      - cassandra
-      - cassandra-init
+      postgres:
+        condition: service_healthy
+      flyway:
+        condition: service_completed_successfully
 
   broker-producer:
     image: ewenbouquet/planes-broker-producer:${VERSION}
@@ -139,20 +143,22 @@ services:
     environment:
       - BROKER_BOOTSTRAP_SERVERS=broker:9092
       - BROKER_TOPIC=ewenbouquet_planes
-      - DATABASE_CONTACT_POINT=cassandra:9042
-      - DATABASE_KEYSPACE=production
-      - DATABASE_DATACENTER=datacenter1
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_KEYSPACE=db_ewen
+      - DB_USER=admin
+      - DB_PASSWORD=root
     entrypoint:
       - bash
       - -c
       - |
-        while ! bash -c "echo > /dev/tcp/cassandra/9042" 2> /dev/null; do sleep 1; done
+        while ! bash -c "echo > /dev/tcp/postgres/5432" 2> /dev/null; do sleep 1; done
         while ! bash -c "echo > /dev/tcp/broker/9092" 2> /dev/null; do sleep 1; done
         /opt/docker/bin/planes-broker-consumer
     depends_on:
-      cassandra:
+      postgres:
         condition: service_healthy
-      cassandra-init:
+      flyway:
         condition: service_completed_successfully
       broker:
         condition: service_healthy

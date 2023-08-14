@@ -11,7 +11,11 @@ pipeline {
         BROKER_BOOTSTRAP_SERVERS        = 'broker:9092'
         BROKER_SCHEDULER_INITIAL_DELAY  = '5 seconds'
         BROKER_SCHEDULER_REFRESH_DELAY  = '1 minute'
-        DATABASE_CONTACT_POINT          = 'cassandra:9042'
+        DB_HOST                         = 'postgres'
+        DB_PORT                         = '5432'
+        DB_KEYSPACE                     = 'db_ewen'
+        DB_USER                         = 'admin'
+        DB_PASSWORD                     = 'root'
     }
     stages {
         stage('Compilation') {
@@ -26,11 +30,16 @@ pipeline {
                 sh 'sbt scalafmtCheckAll'
             }
         }
-        stage('General tests') {
+        stage('Domain tests') {
             steps {
-                echo 'General testing...'
+                echo 'Domain testing...'
                 sh 'sbt domain/test'
-                sh 'sbt cassandra/test'
+            }
+        }
+        stage('DB tests') {
+            steps {
+                echo 'DB testing...'
+                sh 'sbt db/test'
             }
         }
         stage('API tests') {

@@ -3,20 +3,21 @@ package broker_consumer.planes.consumers
 import akka.Done
 import akka.actor.ActorSystem
 import broker._BrokerConsumerSystem
-import cassandra._CassandraSystem
 import io.circe.generic.auto._
 import com.typesafe.scalalogging.Logger
-import database.planes.repositories.PlaneRepository
+import db._DbSystem
+import db.planes.PlaneRepository
 import domain.planes.PlaneDomain
+import org.slf4j.LoggerFactory
 
 import java.time.LocalDateTime
 import scala.concurrent.Future
 
 class PlaneBrokerConsumer(implicit val system: ActorSystem)
     extends _BrokerConsumerSystem[LocalDateTime, PlaneDomain]
-    with _CassandraSystem {
+    with _DbSystem {
 
-  private val logger: Logger = Logger(getClass)
+  private val logger = LoggerFactory.getLogger(getClass)
 
   private val planeRepository = new PlaneRepository()
 
@@ -24,7 +25,7 @@ class PlaneBrokerConsumer(implicit val system: ActorSystem)
     logger.info("Processing a consumed plane")
     planeRepository
       .insertOrEdit(plane)
-      .andThen(_ => logger.info("Plane inserted in cassandra!"))
+      .andThen(_ => logger.info("Plane inserted in DB!"))
   })
 
   override def startBrokerConsumer(): Future[Done] = {
@@ -34,5 +35,5 @@ class PlaneBrokerConsumer(implicit val system: ActorSystem)
   override def stopBrokerConsumer(): Future[Done] =
     super
       .stopBrokerConsumer()
-      .andThen(_ => stopCassandra())
+      .andThen(_ => stopDb())
 }

@@ -7,8 +7,8 @@ lazy val global = (project in file("."))
     libraryDependencies ++= commonsLibraryDependencies,
     Test / parallelExecution := false,
     publish / skip := true)
-  .aggregate(domain, brokerConsumer, brokerProducer, cassandra, api)
-  .dependsOn(domain, brokerConsumer, brokerProducer, cassandra, api)
+  .aggregate(domain, brokerConsumer, brokerProducer, db, api)
+  .dependsOn(domain, brokerConsumer, brokerProducer, db, api)
 
 lazy val api = (project in file("api"))
   .enablePlugins(DockerPlugin, JavaAppPackaging)
@@ -20,7 +20,7 @@ lazy val api = (project in file("api"))
     libraryDependencies ++= apiLibraryDependencies,
     Compile / run / mainClass := Some("api.Main"),
     Docker / packageName := "planes-api")
-  .dependsOn(domain, cassandra)
+  .dependsOn(domain, db)
 
 lazy val brokerConsumer = (project in file("broker-consumer"))
   .enablePlugins(DockerPlugin, JavaAppPackaging)
@@ -32,7 +32,7 @@ lazy val brokerConsumer = (project in file("broker-consumer"))
     libraryDependencies ++= brokerConsumerLibraryDependencies,
     Compile / run / mainClass := Some("broker_consumer.Main"),
     Docker / packageName := "planes-broker-consumer")
-  .dependsOn(domain, cassandra)
+  .dependsOn(domain, db)
 
 lazy val brokerProducer = (project in file("broker-producer"))
   .enablePlugins(DockerPlugin, JavaAppPackaging)
@@ -46,12 +46,12 @@ lazy val brokerProducer = (project in file("broker-producer"))
     Docker / packageName := "planes-broker-producer")
   .dependsOn(domain)
 
-lazy val cassandra = (project in file("cassandra"))
+lazy val db = (project in file("db"))
   .settings(defaultSettings)
   .settings(
     name := "planes-database",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
-    libraryDependencies ++= cassandraLibraryDependencies,
+    libraryDependencies ++= dbLibraryDependencies,
     Compile / run / mainClass := Some("database.Main"))
   .dependsOn(domain)
 
@@ -93,7 +93,7 @@ lazy val projectLibraryDependencies =
 
       val commonsBase = "ewenbouquet" %% "commons-commons-libs" % commonsVersion
       val commonsBroker = "ewenbouquet" %% "commons-broker-libs" % commonsVersion
-      val commonsCassandra = "ewenbouquet" %% "commons-cassandra-libs" % commonsVersion
+      val commonsDb = "ewenbouquet" %% "commons-db-libs" % commonsVersion
       val commonsHttp = "ewenbouquet" %% "commons-http-libs" % commonsVersion
       val commonsScheduler = "ewenbouquet" %% "commons-scheduler-libs" % commonsVersion
     }
@@ -116,9 +116,9 @@ lazy val brokerProducerLibraryDependencies =
     Seq(projectLibraryDependencies.ewenbouquet.commonsBroker) ++
     Seq(projectLibraryDependencies.ewenbouquet.commonsScheduler)
 
-lazy val cassandraLibraryDependencies =
+lazy val dbLibraryDependencies =
   commonsLibraryDependencies ++
-    Seq(projectLibraryDependencies.ewenbouquet.commonsCassandra)
+    Seq(projectLibraryDependencies.ewenbouquet.commonsDb)
 
 lazy val domainLibraryDependencies =
   commonsLibraryDependencies ++

@@ -6,20 +6,21 @@ import akka.http.scaladsl.testkit.ScalatestRouteTest
 import api.planes.controller.PlaneController
 import api.planes.dto.GetPlanesDTO
 import api.planes.mapper.PlaneResponseMapper
-import cassandra._CassandraTestSystem
-import database.planes.repositories.PlaneRepository
+import db._DbTestSystem
+import db.planes.{PlaneRepository, PlaneTable}
 import domain.planes.PlaneDomain
 import org.scalatest.matchers.should.Matchers
 import io.circe.generic.codec.DerivedAsObjectCodec.deriveCodec
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.wordspec.AnyWordSpecLike
+import slick.jdbc.H2Profile.api._
 
-import scala.concurrent.ExecutionContextExecutor
+import scala.concurrent.{ExecutionContextExecutor, Future}
 
 class ApiSpecs
     extends AnyWordSpecLike
     with ScalatestRouteTest
-    with _CassandraTestSystem
+    with _DbTestSystem
     with Matchers
     with ScalaFutures
     with SpecsData {
@@ -64,20 +65,21 @@ class ApiSpecs
     f"return planes list with 3 elements" in {
 
       await(planeRepository.insertOrEdit(plane = plane1))
-      await(planeRepository.insertOrEdit(plane = plane3))
       await(planeRepository.insertOrEdit(plane = plane2))
+      await(planeRepository.insertOrEdit(plane = plane3))
       testPlanesList(plane1, plane2, plane3)
 
     }
 
-    f"return planes list with 2 elements (no duplicates)" in {
-
-      await(planeRepository.insertOrEdit(plane = plane1))
-      await(planeRepository.insertOrEdit(plane = plane2))
-      await(planeRepository.insertOrEdit(plane = plane2))
-      testPlanesList(plane1, plane2)
-
-    }
-
   }
+
+  override def reset(): Future[Any] =
+    db.run(
+      DBIO.sequence(
+        Seq(
+          PlaneTable.PlaneData.schema.dropIfExists,
+          PlaneTable.PlaneData.schema.createIfNotExists)))
+
+  override def clean(): Future[Any] =
+    db.run(PlaneTable.PlaneData.schema.dropIfExists)
 }

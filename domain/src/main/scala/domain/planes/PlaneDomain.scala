@@ -10,7 +10,7 @@ case class PlaneDomain(id: Int, name: String) {
     "plane name must have a length between 3 and 10")
 }
 
-object PlaneDomain extends _RandomGen[PlaneDomain] {
+object PlaneDomainRnd extends _RandomGen[PlaneDomain] {
   override def randomValid(): PlaneDomain =
     PlaneDomain(id = randomInt(), name = randomString(randomInt(3, 10)))
 

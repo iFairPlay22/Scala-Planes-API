@@ -1,6 +1,6 @@
 package domain_test
 
-import domain.planes.PlaneDomain
+import domain.planes.{PlaneDomain, PlaneDomainRnd}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -14,13 +14,13 @@ class DomainSpecs extends AnyWordSpec with Matchers {
 
         s"be invalid $r" in {
           assertThrows[IllegalArgumentException] {
-            PlaneDomain.randomInvalid()
+            PlaneDomainRnd.randomInvalid()
           }
         }
 
         s"be valid $r" in {
           noException shouldBe thrownBy {
-            PlaneDomain.randomValid()
+            PlaneDomainRnd.randomValid()
           }
         }
 
