@@ -115,7 +115,7 @@ services:
     healthcheck:
       test: curl --fail 127.0.0.1:8081/health-check
       start_period: 30s
-      interval: 15s
+      interval: 60s
       timeout: 60s
       retries: 5
     depends_on:
@@ -145,7 +145,7 @@ services:
     healthcheck:
       test: curl --fail 127.0.0.1:8081/health-check
       start_period: 30s
-      interval: 15s
+      interval: 60s
       timeout: 60s
       retries: 5
     depends_on:
@@ -178,7 +178,7 @@ services:
     healthcheck:
       test: curl --fail 127.0.0.1:8081/health-check
       start_period: 30s
-      interval: 15s
+      interval: 60s
       timeout: 60s
       retries: 5
     depends_on:
