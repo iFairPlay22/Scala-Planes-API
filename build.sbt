@@ -109,12 +109,14 @@ lazy val apiLibraryDependencies =
 
 lazy val brokerConsumerLibraryDependencies =
   commonsLibraryDependencies ++
-    Seq(projectLibraryDependencies.ewenbouquet.commonsBroker)
+    Seq(projectLibraryDependencies.ewenbouquet.commonsBroker) ++
+    Seq(projectLibraryDependencies.ewenbouquet.commonsHttp)
 
 lazy val brokerProducerLibraryDependencies =
   commonsLibraryDependencies ++
     Seq(projectLibraryDependencies.ewenbouquet.commonsBroker) ++
-    Seq(projectLibraryDependencies.ewenbouquet.commonsScheduler)
+    Seq(projectLibraryDependencies.ewenbouquet.commonsScheduler) ++
+    Seq(projectLibraryDependencies.ewenbouquet.commonsHttp)
 
 lazy val dbLibraryDependencies =
   commonsLibraryDependencies ++

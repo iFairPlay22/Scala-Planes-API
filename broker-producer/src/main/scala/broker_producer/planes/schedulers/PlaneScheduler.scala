@@ -10,11 +10,10 @@ import scheduler._SchedulerSystem
 
 import scala.concurrent.Future
 
-class PlaneScheduler(implicit val system: ActorSystem) extends _SchedulerSystem {
+class PlaneScheduler(val brokerProducer: PlaneBrokerProducer)(implicit val system: ActorSystem) extends _SchedulerSystem {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  private final val brokerProducer: PlaneBrokerProducer = new PlaneBrokerProducer()
   override def startScheduler(): Future[Done] =
     brokerProducer
       .startBrokerProducer()

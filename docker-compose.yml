@@ -97,6 +97,8 @@ services:
     environment:
       - API_HOST=0.0.0.0
       - API_PORT=8080
+      - HEALTH_CHECK_HOST=0.0.0.0
+      - HEALTH_CHECK_PORT=8081
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_KEYSPACE=db_ewen
@@ -108,6 +110,12 @@ services:
       - |
         while ! bash -c "echo > /dev/tcp/postgres/5432" 2> /dev/null; do sleep 1; done
         /opt/docker/bin/planes-api
+    healthcheck:
+      test: curl --fail 127.0.0.1:8081/health-check
+      start_period: 30s
+      interval: 15s
+      timeout: 60s
+      retries: 5
     depends_on:
       postgres:
         condition: service_healthy
@@ -119,6 +127,8 @@ services:
     networks:
       - default
     environment:
+      - HEALTH_CHECK_HOST=0.0.0.0
+      - HEALTH_CHECK_PORT=8081
       - BROKER_BOOTSTRAP_SERVERS=broker:9092
       - BROKER_TOPIC=ewenbouquet_planes
       - BROKER_SCHEDULER_INITIAL_DELAY=5 seconds
@@ -130,6 +140,12 @@ services:
       - |
         while ! bash -c "echo > /dev/tcp/broker/9092" 2> /dev/null; do sleep 1; done
         /opt/docker/bin/planes-broker-producer
+    healthcheck:
+      test: curl --fail 127.0.0.1:8081/health-check
+      start_period: 30s
+      interval: 15s
+      timeout: 60s
+      retries: 5
     depends_on:
       broker:
         condition: service_healthy
@@ -141,6 +157,8 @@ services:
     networks:
       - default
     environment:
+      - HEALTH_CHECK_HOST=0.0.0.0
+      - HEALTH_CHECK_PORT=8081
       - BROKER_BOOTSTRAP_SERVERS=broker:9092
       - BROKER_TOPIC=ewenbouquet_planes
       - DB_HOST=postgres
@@ -155,6 +173,12 @@ services:
         while ! bash -c "echo > /dev/tcp/postgres/5432" 2> /dev/null; do sleep 1; done
         while ! bash -c "echo > /dev/tcp/broker/9092" 2> /dev/null; do sleep 1; done
         /opt/docker/bin/planes-broker-consumer
+    healthcheck:
+      test: curl --fail 127.0.0.1:8081/health-check
+      start_period: 30s
+      interval: 15s
+      timeout: 60s
+      retries: 5
     depends_on:
       postgres:
         condition: service_healthy

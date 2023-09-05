@@ -15,7 +15,7 @@ import scala.concurrent.Future
 
 class PlaneBrokerConsumer(implicit val system: ActorSystem)
     extends _BrokerConsumerSystem[LocalDateTime, PlaneDomain]
-    with _DbSystem {
+      with _DbSystem {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
