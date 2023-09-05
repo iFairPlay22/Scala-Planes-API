@@ -43,14 +43,20 @@ data:
   planes-api-postgres-db: 'production'
   planes-api-host: 0.0.0.0
   planes-api-port: '8080'
+  planes-api-health-check-host: 0.0.0.0
+  planes-api-health-check-port: '8081'
 
   # Planes broker producer
   planes-broker-producer-service-name: planes-broker-producer-service
   planes-broker-producer-topic: 'ewenbouquet_planes'
   planes-broker-producer-initial-delay: 5 seconds
   planes-broker-producer-refresh-delay: 1 minute
+  planes-broker-producer-health-check-host: 0.0.0.0
+  planes-broker-producer-health-check-port: '8081'
 
   # Planes broker consumer
   planes-broker-consumer-service-name: planes-broker-consumer-service-service
   planes-broker-consumer-topic: 'ewenbouquet_planes'
   planes-broker-consumer-postgres-db: 'production'
+  planes-broker-consumer-health-check-host: 0.0.0.0
+  planes-broker-consumer-health-check-port: '8081'

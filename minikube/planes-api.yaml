@@ -30,6 +30,16 @@ spec:
               configMapKeyRef:
                 name: planes-config
                 key: planes-api-port
+          - name: HEALTH_CHECK_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: planes-config
+                key: planes-api-health-check-host
+          - name: HEALTH_CHECK_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: planes-config
+                key: planes-api-health-check-port
           - name: DB_HOST
             valueFrom:
               configMapKeyRef:
@@ -55,6 +65,14 @@ spec:
               configMapKeyRef:
                 name: planes-config
                 key: postgres-password
+          livenessProbe:
+            httpGet:
+              path: /health-check
+              port: 8081
+            initialDelaySeconds: 60s
+            periodSeconds: 60s
+            timeoutSeconds: 30s
+            failureThreshold: 3
       initContainers:
         - name: wait-for-postgres
           image: busybox:1.28

@@ -20,6 +20,16 @@ spec:
           ports:
             - containerPort: 8080
           env:
+            - name: HEALTH_CHECK_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: planes-config
+                  key: planes-broker-producer-health-check-host
+            - name: HEALTH_CHECK_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: planes-config
+                  key: planes-broker-producer-health-check-port
             - name: BROKER_BOOTSTRAP_SERVERS
               valueFrom:
                 configMapKeyRef:
@@ -40,6 +50,14 @@ spec:
                 configMapKeyRef:
                   name: planes-config
                   key: planes-broker-producer-refresh-delay
+          livenessProbe:
+            httpGet:
+              path: /health-check
+              port: 8081
+            initialDelaySeconds: 60s
+            periodSeconds: 60s
+            timeoutSeconds: 30s
+            failureThreshold: 3
       initContainers:
         - name: wait-for-broker
           image: busybox:1.28
