@@ -52,6 +52,15 @@ Launch the services:
 
 ### Using Minikube
 
+Publish the flyway docker image with the latest migrations
+
+    export IMAGE_NAME=ewenbouquet/flyway:latest
+    export DOCKERFILE_PATH=flyway.dockerfile
+    
+    docker rmi $IMAGE_NAME
+    docker build -f $DOCKERFILE_PATH -t $IMAGE_NAME . --no-cache
+    docker push $IMAGE_NAME
+
 Launch minikube
 
     minikube start
@@ -61,14 +70,12 @@ Launch the services
     cd ./minikube
     kubectl apply -f planes-secret.yaml
     kubectl apply -f planes-config.yaml
-    kubectl apply -f db.yaml
+    kubectl apply -f postgres.yaml
     kubectl apply -f zookeeper.yaml
     kubectl apply -f broker.yaml
     kubectl apply -f planes-api.yaml
     kubectl apply -f planes-broker-producer.yaml
     kubectl apply -f planes-broker-consumer.yaml
-
-NOTE: Use minikube service planes-api-service --url to have the url
 
 ## Interacting with the sample
 

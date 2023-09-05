@@ -29,34 +29,55 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: planes-config
-                  key: planes-broker-consumer-planes-topic
-            - name: DATABASE_CONTACT_POINT
+                  key: planes-broker-consumer-topic
+            - name: DB_HOST
               valueFrom:
                 configMapKeyRef:
                   name: planes-config
-                  key: cassandra-url
-            - name: DATABASE_KEYSPACE
+                  key: postgres-service-name
+            - name: DB_PORT
               valueFrom:
                 configMapKeyRef:
                   name: planes-config
-                  key: planes-broker-consumer-cassandra-keyspace
-            - name: DATABASE_DATACENTER
+                  key: postgres-port
+            - name: DB_KEYSPACE
               valueFrom:
                 configMapKeyRef:
                   name: planes-config
-                  key: cassandra-datacenter
+                  key: planes-broker-consumer-postgres-db
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: planes-config
+                  key: postgres-user
+            - name: DB_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: planes-config
+                  key: postgres-password
       initContainers:
-        - name: wait-for-cassandra
+        - name: wait-for-postgres
           image: busybox:1.28
           env:
             - name: SERVICE_NAME
               valueFrom:
                 configMapKeyRef:
                   name: planes-config
-                  key: cassandra-service-name
+                  key: postgres-service-name
             - name: RETRY_DELAY
               value: '15'
           command: ['sh', '-c', "until nslookup $SERVICE_NAME.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for $SERVICE_NAME; sleep $RETRY_DELAY; done; echo ; echo Service available: end of task!"]
+        - name: flyway
+          image: ewenbouquet/flyway:latest
+          args: [
+            "-url=jdbc:postgresql://postgres-service:5432/db_ewen?allowPublicKeyRetrieval=true",
+            "-schemas=db_ewen",
+            "-user=admin",
+            "-password=root",
+            "-connectRetries=60",
+            "-validateMigrationNaming=true",
+            "migrate"
+          ]
         - name: wait-for-broker
           image: busybox:1.28
           env:

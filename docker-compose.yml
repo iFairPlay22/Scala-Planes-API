@@ -30,7 +30,9 @@ services:
       - ADMINER_DEFAULT_DATABASE=db_ewen
 
   flyway:
-    image: flyway/flyway:latest
+    build:
+      context: .
+      dockerfile: ./flyway.dockerfile
     depends_on:
       postgres:
         condition: service_healthy

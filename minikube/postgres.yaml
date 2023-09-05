@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: planes-config
+                  key: postgres-db
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: planes-config
+                  key: postgres-user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: planes-config
+                  key: postgres-password
+          volumeMounts:
+            # The volume mounts  for the container
+            - mountPath: /var/lib/postgres/data
+              name: postgres-data-volume
+      # Volumes attached to the pod
+      volumes:
+        - name: postgres-data-volume
+          persistentVolumeClaim:
+            # reference the PersistentVolumeClaim
+            claimName: postgres-persistent-volume-claim
+---
+apiVersion: v1
+# Kind for service
+kind: Service
+metadata:
+  # Name your service
+  name: postgres-service
+  labels:
+    app: postgres
+spec:
+  # Choose how to expose your service
+  type: NodePort
+  ports:
+    # The port number to expose the service
+    - port: 5432
+  # Pod to route service traffic
+  selector:
+    app: postgres
+---
+apiVersion: v1
+# Kind for volume chain
+kind: PersistentVolume
+metadata:
+  # Name the persistent chain
+  name: postgres-persistent-volume
+  # Labels for identifying PV
+  labels:
+    type: local
+    app: postgres
+spec:
+  storageClassName: manual
+  capacity:
+    # PV Storage capacity
+    storage: 8Gi
+  # A db can write and read from volumes to multiple pods
+  accessModes:
+    - ReadWriteMany
+  # Specify the path to persistent the volumes
+  hostPath:
+    path: "/data/db"
+---
+apiVersion: v1
+# define a resource for volume chain
+kind: PersistentVolumeClaim
+metadata:
+  # Name the volume chain
+  name: postgres-persistent-volume-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    # Allow ReadWrite to multiple pods
+    - ReadWriteMany
+  # PVC requesting resources
+  resources:
+    requests:
+      # the PVC storage
+      storage: 8Gi

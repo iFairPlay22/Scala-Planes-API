@@ -8,18 +8,23 @@ data:
   #> Environment                                                                                 #
   ################################################################################################
 
-  # Cassandra
-  cassandra-service-name: cassandra-service
-  cassandra-url: cassandra-service:9042
-  cassandra-datacenter: datacenter1
+  # Postgres
+  postgres-service-name: postgres-service
+  postgres-port: '5432'
+  postgres-url: postgres-service:5432
+  postgres-db: db_ewen
+  postgres-user: admin
+  postgres-password: root
 
   # Zookeeper
   zookeeper-service-name: zookeeper-service
+  zookeeper-port: '2181'
   zookeeper-url: zookeeper-service:2181
   zookeeper-tick-time: '2000'
 
   # Broker
   broker-service-name: broker-service
+  broker-port: '9093'
   broker-url: broker-service:9093
   broker-broker-id: '1'
   broker-listener-security-protocol-map: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
@@ -35,7 +40,7 @@ data:
 
   # Planes api
   planes-api-service-name: planes-api-service
-  planes-api-cassandra-keyspace: 'production'
+  planes-api-postgres-db: 'production'
   planes-api-host: 0.0.0.0
   planes-api-port: '8080'
 
@@ -47,5 +52,5 @@ data:
 
   # Planes broker consumer
   planes-broker-consumer-service-name: planes-broker-consumer-service-service
-  planes-broker-consumer-planes-topic: 'ewenbouquet_planes'
-  planes-broker-consumer-cassandra-keyspace: 'production'
+  planes-broker-consumer-topic: 'ewenbouquet_planes'
+  planes-broker-consumer-postgres-db: 'production'
